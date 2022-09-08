@@ -9,6 +9,7 @@ var AllLine = File.ReadAllLines(FilePath);
 using var Client = new HttpClient();
 var Url = $"{Domain}/CRIMS/api/Auth/Register_Contractor";
 
+var c = 0;
 foreach (var Line in AllLine.Skip(1))
 {
     var Cols = Line.Split(",");
@@ -32,5 +33,11 @@ foreach (var Line in AllLine.Skip(1))
 
     var JsonString = System.Text.Json.JsonSerializer.Serialize(Data);
     var Content = new StringContent(JsonString, Encoding.UTF8, "application/json");
-    await Client.PostAsync(Url, Content);
+    var ApiRet = await Client.PostAsync(Url, Content);
+
+    Console.WriteLine(await ApiRet.Content.ReadAsStringAsync());
+    c++;
+    if (c > 2)
+        break;
+
 }
